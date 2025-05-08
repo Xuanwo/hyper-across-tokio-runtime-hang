@@ -1,3 +1,7 @@
+**This repo is AI generated and served for debugging. PLEASE DON'T TRUST IT.**
+
+---
+
 # Hyper Across Tokio Runtime Hang
 
 This repository contains an example that demonstrates the potential issues that can occur when using Hyper-based HTTP clients (like reqwest) across multiple Tokio runtimes. This is a common issue encountered in production systems.
@@ -62,7 +66,7 @@ let runtime = tokio::runtime::Builder::new_multi_thread()
 runtime.block_on(async {
     // Initialize shared clients here
     let client = reqwest::Client::new();
-    
+
     // All tasks use the same runtime
     tokio::spawn(async move {
         // Using client is safe here
@@ -99,7 +103,7 @@ Create a factory that ensures clients are created on the runtime where they'll b
 fn get_client_for_current_runtime() -> reqwest::Client {
     // Ensure we're on a Tokio runtime
     let _guard = tokio::runtime::Handle::current();
-    
+
     // This client is tied to the current runtime
     reqwest::Client::new()
 }
@@ -121,17 +125,17 @@ impl ClientProxy {
         let client = runtime.block_on(async {
             reqwest::Client::new()
         });
-        
+
         Self {
             client,
             runtime: handle,
         }
     }
-    
+
     async fn get(&self, url: &str) -> Result<String, reqwest::Error> {
         let url = url.to_string();
         let client = self.client.clone();
-        
+
         // Execute the request on the runtime that created the client
         self.runtime.spawn(async move {
             client.get(&url).send().await?.text().await
