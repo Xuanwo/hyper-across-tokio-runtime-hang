@@ -1026,7 +1026,7 @@ fn spawn_hang_monitor() -> thread::JoinHandle<()> {
         // Check for hangs every second
         for i in 1..60 {
             // Extended monitoring time
-            thread::sleep(Duration::from_secs(1));
+            thread::sleep(Duration::from_secs(5));
 
             // Track active connection count
             let current_connections = ACTIVE_CONNECTIONS.load(Ordering::SeqCst);
